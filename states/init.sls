@@ -83,6 +83,8 @@ elasticsearch_install_plugin_{{ p.name }}:
     - run
     - name: {% if java_home %}export JAVA_HOME='{{ java_home }}' && {% endif %} echo "y" | {{ datamap.basepath|default('/usr/share/elasticsearch') }}/bin/elasticsearch-plugin install -s '{{ p.name }}'
     - unless: test -d '{{ datamap.basepath|default('/usr/share/elasticsearch') }}/plugins/{{ p.installed_name|default(p.name) }}'
+    - watch_in:
+      - service: elasticsearch
 {% endfor %}
 
 {% for k, v in datamap.indices|default({})|dictsort %}
